@@ -57,4 +57,11 @@ O ecossistema é dividido em uma arquitetura desacoplada (Backend API e Frontend
 ### 1. Clonar o Repositório e Configurar o Ambiente
 ```bash
 git clone [https://github.com/seu-usuario/food-premium-ai-pipeline.git](https://github.com/seu-usuario/food-premium-ai-pipeline.git)
-cd food-premium-ai-pipeline
+cd food-premium-ai-pipeline/backend
+python3 manage.py runserver 8001
+cd ../frontend
+streamlit run app.py
+
+
+
+
