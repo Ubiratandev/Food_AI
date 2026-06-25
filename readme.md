@@ -11,14 +11,14 @@ Abaixo está o exemplo real do ecossistema processando uma imagem de baixa quali
 
 | 📸 Foto Amadora (Input Original do Usuário) | 🚀 Resultado Comercial (Output Otimizado por IA) |
 | :---: | :---: |
-| <img src="backend/fotoRuim.jpg" width="380" alt="Foto Original Amadora"> | <img src="frontend/assets/fotoPremium.jpg" width="380" alt="Resultado Profissional Estilo iFood"> |
+| <img src="backend/fotoRuim.jpg" width="380" alt="Foto Original Amadora"> | <img src="backend/fotoPremium.jpg" width="380" alt="Resultado Profissional Estilo iFood"> |
 
 ### 🤖 Prompt Gerado pelo Agente Gemini para o Modelo de Difusão (FLUX):
 > "Professional food advertisement photography of a premium gourmet artisan hamburger, eye-level macro shot. A perfectly thick, juicy, seared grilled beef patty with glistening textures, draped in rich melted cheddar cheese. Vibrant, glossy gourmet red tomato relish/sauce elegantly dripping down the side. Encased in a perfectly toasted, golden-brown brioche bun. A clean wooden skewer is inserted vertically through the center of the top bun. Set on a clean, dark rustic wooden table in a high-end restaurant background with a soft, warm bokeh. High-end studio softbox lighting, cinematic rim light emphasizing textures, crisp details, appetizing presentation, commercial food styling look, 8k resolution, photorealistic."
 
 ---
 
-🏗️ Arquitetura do Sistema e Pipeline de Dados
+## 🏗️ Arquitetura do Sistema e Pipeline de Dados
 O ecossistema é dividido em uma arquitetura desacoplada (Backend API e Frontend de Prototipagem Rápida) operando de forma linear através de camadas especializadas:
 
 *   **Camada de Percepção e Guardrail (RT-DETR):** O input do usuário (imagem) é interceptado por um modelo de Visão Computacional de tempo real executado localmente. Se o objeto detectado não pertencer à classe gastronômica permitida, a requisição é abortada na borda, economizando processamento e custos de API.
@@ -31,7 +31,7 @@ O ecossistema é dividido em uma arquitetura desacoplada (Backend API e Frontend
 
 *   **AI Guardrails:** Implementação de regras de segurança rígidas na camada de entrada utilizando `ultralytics` (RT-DETR). O sistema autogerencia threads de CPU (`torch.set_num_threads(1)`) e memória através do modo de inferência otimizado `@torch.inference_mode()` para garantir performance concorrente estável no ambiente web.
 *   **Graceful Degradation (Fallback Automático):**
-    *   **No Prompting:** Caso a API do Gemini sofra timeout ou indisponibilidade, o backend intercepta a exceção e ativa um mapeamento estático local heurístico para manter a geração ativa.
+    *   **No Prompting:** Caso a API do Gemini sofra timeout ou indisponibilidade, o backend intercepta a exceção e activa um mapeamento estático local heurístico para manter a geração ativa.
     *   **Na Geração:** Caso o provedor de nuvem principal (Replicate/Flux Pro) atinja limites de cota ou créditos, o pipeline rotaciona dinamicamente a requisição para a API aberta do Pollinations AI, garantindo Alta Disponibilidade (HA) ao usuário final.
 *   **Desacoplamento de Serviços:** Toda a lógica de comunicação externa e tratamento de streams de bytes HTTP foi isolada em camadas de serviços (`services.py`), blindando os controladores do framework web (`views.py`).
 
