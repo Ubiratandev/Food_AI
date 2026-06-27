@@ -1,14 +1,15 @@
-Food Premium AI Enhancer 🍲
+Food Premium AI Enhancer 
 
 Pipeline Assíncrono Multi-Agente com Guardrails de Visão Computacional e Arquitetura Resiliente
 
 Este projeto apresenta o desenvolvimento de um pipeline inteligente ponta a ponta voltado para a validação, otimização semântica e transformação visual gastronômica. Projetado sob a ótica de engenharia de software robusta, o sistema mitiga o desperdício de recursos computacionais (tokens) em nuvem através de filtros síncronos locais e implementa tolerância a falhas via mecanismos de Graceful Degradation.
-📊 O Pipeline em Ação (Antes vs. Depois)
+
+O Pipeline em Ação (Antes vs. Depois)
 
 Abaixo está o exemplo real do ecossistema processando uma imagem de baixa qualidade enviada pelo usuário, gerando o contexto semântico ideal e transformando-a em um ativo comercial de alto padrão.
-📸 Foto Amadora (Input Original do Usuário) 	🚀 Resultado Comercial (Output Otimizado por IA)
+Foto Amadora (Input Original do Usuário) 	 Resultado Comercial (Output Otimizado por IA)
 Foto Original Amadora 	Resultado Profissional Estilo iFood
-🤖 Prompt Gerado pelo Agente Gemini para o Modelo de Difusão (FLUX):
+ Prompt Gerado pelo Agente Gemini para o Modelo de Difusão (FLUX):
 
     "flux_prompt":"Transform this amateur sandwich photo into premium iFood-style food photography.\n\nPreserve the original sandwich layout, ingredients, toppings, proportions and colors exactly as photographed. Do not add ingredients. Do not redesign the product.\n\nProfessional food photography, commercial restaurant advertising, ultra realistic, premium presentation.\n\nEnhance natural texture of the burger, fresh melted cheese, juicy meat appearance, and soft bun texture. Improve lighting with soft studio lighting while maintaining realism.\n\nFresh sandwich with natural color and texture. Natural highlights and shadows.\n\nDark neutral background, shallow depth of field, DSLR photography, premium advertising, restaurant menu quality.\n\nCenter composition, product occupying 80-90% of the frame, clean "flux_negative_prompt":"cartoon, CGI, fake fruit, plastic fruit, artificial appearance, extra ingredients, duplicated toppings, unrealistic shine, melted appearance, oversaturated colors, low quality, blur"flux_negative_prompt":"cartoon, CGI, fake fruit, plastic fruit, artificial appearance, extra ingredients, duplicated toppings, unrealistic shine, melted appearance, oversaturated colors, low quality, blurprofessional presentation, food magazine quality, ultra photorealistic, 8k.\n\nRemove visual distractions, remove clutter, remove amateur lighting, remove blur, remove noise, remove harsh flash reflections."
 
