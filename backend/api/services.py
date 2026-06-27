@@ -15,7 +15,7 @@ def gerar_imagem_ia_flux(prompt, negative_prompt):
         # Inicializa o cliente do Replicate com o token
         client = replicate.Client(api_token=token)
 
-        print(f"🚀 Enviando para o Flux. Prompt: {prompt[:60]}...")
+        print(f"Enviando para o Flux. Prompt: {prompt[:60]}...")
 
         # Executa o modelo Flux via API
         output = client.run(
@@ -36,7 +36,7 @@ def gerar_imagem_ia_flux(prompt, negative_prompt):
         else:
             url_final = str(output)
 
-        print(f"✅ Imagem gerada com sucesso pelo Flux: {url_final}")
+        print(f"Imagem gerada com sucesso pelo Flux: {url_final}")
         return url_final
 
     except Exception as e:
