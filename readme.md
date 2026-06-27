@@ -1,58 +1,157 @@
-Food Premium AI Enhancer 
+# Food Premium AI Enhancer 🍲
 
-Pipeline Assíncrono Multi-Agente com Guardrails de Visão Computacional e Arquitetura Resiliente
+Pipeline de visão computacional e IA generativa para validar imagens gastronômicas e transformá-las em fotos comerciais otimizadas para cardápios digitais, delivery e redes sociais.
 
-Este projeto apresenta o desenvolvimento de um pipeline inteligente ponta a ponta voltado para a validação, otimização semântica e transformação visual gastronômica. Projetado sob a ótica de engenharia de software robusta, o sistema mitiga o desperdício de recursos computacionais (tokens) em nuvem através de filtros síncronos locais e implementa tolerância a falhas via mecanismos de Graceful Degradation.
+O projeto combina um backend em Django REST Framework, um modelo local de detecção de objetos com RT-DETR e integração com modelos generativos como Gemini e FLUX. A proposta é evitar chamadas desnecessárias para APIs externas validando primeiro se a imagem enviada contém alimentos permitidos.
 
-O Pipeline em Ação (Antes vs. Depois)
+---
 
-Abaixo está o exemplo real do ecossistema processando uma imagem de baixa qualidade enviada pelo usuário, gerando o contexto semântico ideal e transformando-a em um ativo comercial de alto padrão.
-Foto Amadora (Input Original do Usuário) 	 Resultado Comercial (Output Otimizado por IA)
-Foto Original Amadora 	Resultado Profissional Estilo iFood
- Prompt Gerado pelo Agente Gemini para o Modelo de Difusão (FLUX):
+## 📊 Antes vs. Depois
 
-    "flux_prompt":"Transform this amateur sandwich photo into premium iFood-style food photography.\n\nPreserve the original sandwich layout, ingredients, toppings, proportions and colors exactly as photographed. Do not add ingredients. Do not redesign the product.\n\nProfessional food photography, commercial restaurant advertising, ultra realistic, premium presentation.\n\nEnhance natural texture of the burger, fresh melted cheese, juicy meat appearance, and soft bun texture. Improve lighting with soft studio lighting while maintaining realism.\n\nFresh sandwich with natural color and texture. Natural highlights and shadows.\n\nDark neutral background, shallow depth of field, DSLR photography, premium advertising, restaurant menu quality.\n\nCenter composition, product occupying 80-90% of the frame, clean "flux_negative_prompt":"cartoon, CGI, fake fruit, plastic fruit, artificial appearance, extra ingredients, duplicated toppings, unrealistic shine, melted appearance, oversaturated colors, low quality, blur"flux_negative_prompt":"cartoon, CGI, fake fruit, plastic fruit, artificial appearance, extra ingredients, duplicated toppings, unrealistic shine, melted appearance, oversaturated colors, low quality, blurprofessional presentation, food magazine quality, ultra photorealistic, 8k.\n\nRemove visual distractions, remove clutter, remove amateur lighting, remove blur, remove noise, remove harsh flash reflections."
+Abaixo está um exemplo real do pipeline processando uma imagem amadora enviada pelo usuário, gerando um prompt gastronômico otimizado e transformando o resultado em uma imagem comercial para uso em cardápios digitais.
 
-🏗️ Arquitetura do Sistema e Pipeline de Dados
+| Foto amadora enviada pelo usuário                                        | Resultado otimizado por IA                                                                |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| ![Foto original amadora](docs/images/input-original.jpg)                 | ![Resultado comercial gerado por IA](docs/images/output-ia.jpg)                           |
+| Imagem original com iluminação simples, fundo comum e aparência amadora. | Imagem final com iluminação aprimorada, textura mais valorizada e apresentação comercial. |
 
-O ecossistema é dividido em uma arquitetura desacoplada (Backend API e Frontend de Prototipagem Rápida) operando de forma linear através de camadas especializadas:
+---
 
-    Camada de Percepção e Guardrail (RT-DETR): O input do usuário (imagem) é interceptado por um modelo de Visão Computacional de tempo real executado localmente. Se o objeto detectado não pertencer à classe gastronômica permitida, a requisição é abortada na borda, economizando processamento e custos de API.
-    Camada de Orquestração Semântica (Agente LLM - Gemini): Uma vez validado, os metadados das classes detectadas são injetados em um agente especialista em Engenharia de Prompt Gastronômico, que traduz inputs amadores em descrições comerciais hiper-realistas de alta fidelidade.
-    Camada de Geração Visual (Modelos de Difusão - FLUX): O prompt otimizado alimenta o modelo de fundação visual para a renderização final do produto comercial.
+## 🤖 Exemplo de Prompt Gerado
 
-🛡️ Destaques Técnicos e Padrões de Projeto (Design Patterns)
+Após a validação da imagem, o sistema usa as classes detectadas para gerar um prompt otimizado para o modelo de difusão.
 
-    AI Guardrails: Implementação de regras de segurança rígidas na camada de entrada utilizando ultralytics (RT-DETR). O sistema autogerencia threads de CPU (torch.set_num_threads(1)) e memória através do modo de inferência otimizado @torch.inference_mode() para garantir performance concorrente estável no ambiente web.
-    Graceful Degradation (Fallback Automático):
-        No Prompting: Caso a API do Gemini sofra timeout ou indisponibilidade, o backend intercepta a exceção e activa um mapeamento estático local heurístico para manter a geração ativa.
-        Na Geração: Caso o provedor de nuvem principal (Replicate/Flux Pro) atinja limites de cota ou créditos, o pipeline rotaciona dinamicamente a requisição para a API aberta do Pollinations AI, garantindo Alta Disponibilidade (HA) ao usuário final.
-    Desacoplamento de Serviços: Toda a lógica de comunicação externa e tratamento de streams de bytes HTTP foi isolada em camadas de serviços (services.py), blindando os controladores do framework web (views.py).
+```json
+{
+  "flux_prompt": "Transform this amateur sandwich photo into premium iFood-style food photography. Preserve the original sandwich layout, ingredients, toppings, proportions and colors exactly as photographed. Do not add ingredients. Do not redesign the product. Professional food photography, commercial restaurant advertising, ultra realistic, premium presentation. Enhance natural texture of the burger, fresh melted cheese, juicy meat appearance, and soft bun texture. Improve lighting with soft studio lighting while maintaining realism. Dark neutral background, shallow depth of field, DSLR photography, restaurant menu quality. Center composition, product occupying 80-90% of the frame. Remove visual distractions, clutter, blur, noise and harsh flash reflections.",
+  "flux_negative_prompt": "cartoon, CGI, artificial appearance, extra ingredients, duplicated toppings, unrealistic shine, oversaturated colors, low quality, blur"
+}
+```
 
-🛠️ Tecnologias Utilizadas
-Backend (API & AI Pipeline)
+---
 
-    Python 3.10+
-    Django & Django REST Framework (DRF)
-    PyTorch / Ultralytics (Modelo Real-Time DEtection TRansformer - RT-DETR)
-    Google GenAI SDK (Modelos gemini-2.5-flash)
-    Replicate API / Pollinations AI Gateway
+## 🏗️ Visão Geral do Pipeline
 
-Frontend (Interface de Operações)
+O usuário envia uma foto amadora de um prato, lanche ou produto gastronômico. Antes de chamar qualquer modelo generativo, o backend executa uma etapa local de visão computacional para identificar os objetos presentes na imagem.
 
-    Streamlit (Interface ágil integrada para validação de protótipos de P&D)
-    Requests / Pillow (Manipulação e transmissão de I/O de imagem em buffers de memória)
+Se o conteúdo detectado for compatível com classes gastronômicas permitidas, o sistema gera um prompt otimizado com auxílio do Gemini e envia a imagem para um modelo de difusão, responsável por melhorar iluminação, textura, enquadramento e apresentação visual.
 
-🚀 Como Executar o Projeto
-1. Clonar o Repositório e Configurar o Ambiente
+Caso alguma API externa falhe, o backend utiliza estratégias de fallback para manter o fluxo funcionando de forma degradada, sem interromper completamente a experiência do usuário.
 
-git clone [https://github.com/seu-usuario/food-premium-ai-pipeline.git](https://github.com/seu-usuario/food-premium-ai-pipeline.git)
+---
+
+## 🔁 Fluxo de Processamento
+
+1. O usuário faz upload da imagem no frontend em Streamlit.
+2. A imagem é enviada para a API Django.
+3. O backend valida o conteúdo usando RT-DETR localmente.
+4. As classes detectadas são enviadas para o Gemini.
+5. O Gemini gera um prompt gastronômico otimizado.
+6. O prompt e a imagem são enviados para o modelo FLUX.
+7. A imagem final otimizada é retornada para o usuário.
+
+---
+
+## 🧠 Camadas do Sistema
+
+### 1. Validação com Visão Computacional
+
+A primeira etapa do pipeline utiliza RT-DETR via Ultralytics para detectar objetos na imagem enviada.
+
+Essa etapa funciona como um guardrail local antes das chamadas para APIs externas. Se a imagem não contém alimentos ou itens gastronômicos permitidos, a requisição pode ser rejeitada antes de consumir tokens, créditos ou chamadas pagas.
+
+### 2. Geração Semântica de Prompt
+
+Após a validação, as classes detectadas são enviadas para um agente baseado em Gemini.
+
+Esse agente transforma os alimentos identificados em um prompt mais rico, específico e adequado para fotografia gastronômica comercial.
+
+### 3. Geração Visual
+
+A imagem original e o prompt otimizado são enviados para um modelo de difusão. O sistema foi testado com FLUX via Replicate e possui fallback para Pollinations AI em caso de falha ou indisponibilidade do provedor principal.
+
+---
+
+## 🛡️ Estratégias de Robustez
+
+* Validação local antes de chamadas externas.
+* Uso de `torch.inference_mode()` para otimizar a inferência.
+* Controle de threads com `torch.set_num_threads(1)` para maior estabilidade no ambiente web.
+* Fallback local de prompt caso a API do Gemini falhe.
+* Fallback de geração visual caso o provedor principal esteja indisponível.
+* Separação da lógica de comunicação externa em uma camada de serviços.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+
+* Python 3.10+
+* Django
+* Django REST Framework
+* PyTorch
+* Ultralytics
+* RT-DETR
+* Google GenAI SDK
+* Replicate API
+* Pollinations AI
+
+### Frontend
+
+* Streamlit
+* Requests
+* Pillow
+
+---
+
+## 🚀 Como Executar
+
+### Backend
+
+```bash
+git clone https://github.com/seu-usuario/food-premium-ai-pipeline.git
 cd food-premium-ai-pipeline/backend
-python3 manage.py runserver 8001
+
+python3 -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+python manage.py runserver 8001
+```
+
+### Frontend
+
+```bash
 cd ../frontend
 streamlit run app.py
+```
 
+---
 
+## 🔐 Variáveis de Ambiente
 
+Crie um arquivo `.env` no backend com as chaves necessárias:
 
+```env
+GEMINI_API_KEY=sua_chave_gemini
+REPLICATE_API_TOKEN=seu_token_replicate
+```
+
+---
+
+## 📌 Status do Projeto
+
+Este projeto está em fase de protótipo funcional.
+
+A versão atual já permite validar imagens gastronômicas, gerar prompts comerciais e executar a transformação visual usando provedores externos de IA.
+
+### Próximos passos
+
+* Melhorar o tratamento de erros no frontend.
+* Criar testes automatizados para o backend.
+* Adicionar fila assíncrona com Celery ou RQ.
+* Salvar histórico de imagens processadas.
+* Criar painel administrativo para acompanhar requisições e custos.
+* Expandir as classes gastronômicas aceitas pelo guardrail.
 
