@@ -6,12 +6,11 @@ import io
 # Configuração da página do Streamlit
 st.set_page_config(
     page_title="Food Premium AI Enhancer",
-    page_icon="🍲",
     layout="centered"
 )
 
 # Estilização básica e títulos
-st.title("🍲 Food Premium AI Enhancer")
+st.title("Food Premium AI Enhancer")
 st.markdown("### *Pipeline Multi-Agente para Validação e Otimização Visual Gastronômica*")
 st.write("Suba a foto amadora do seu prato e veja a IA validar os alimentos e transformá-la em uma fotografia comercial estilo iFood.")
 
@@ -29,10 +28,10 @@ modo_demo = st.checkbox("Ativar Modo Demo / Simulação (Ignorar limite de créd
 if uploaded_file is not None:
     # Exibe a imagem original que o usuário subiu
     image = Image.open(uploaded_file)
-    st.image(image, caption="📷 Sua Foto Original", use_container_width=True)
+    st.image(image, caption="Sua Foto Original", use_container_width=True)
     
-    if st.button("🚀 Processar Imagem com IA"):
-        with st.spinner("🤖 Executando Pipeline de IA (RT-DETR + Gemini + Flux)..."):
+    if st.button("Processar Imagem com IA"):
+        with st.spinner("Executando Pipeline de IA (RT-DETR + Gemini + Flux)..."):
             try:
                 # Converte a imagem de volta para bytes para enviar via HTTP
                 img_byte_arr = io.BytesIO()
@@ -48,17 +47,17 @@ if uploaded_file is not None:
                 if response.status_code == 200:
                     data = response.json()
                     
-                    st.success("✅ Imagem aprovada pelos Guardrails de Visão Computacional!")
+                    st.success("Imagem aprovada pelos Guardrails de Visão Computacional!")
                     
                     # Mostra os alimentos que o RT-DETR detectou
                     st.write(f"**Alimentos detectados:** {', '.join(data.get('detected', []))}")
                     
                     # Expansor para o avaliador ver o prompt que o Gemini gerou
-                    with st.expander("🧠 Ver Engenharia de Prompt gerada pelo Agente Gemini"):
+                    with st.expander("Ver Engenharia de Prompt gerada pelo Agente Gemini"):
                         st.code(data.get('input_prompt_used'), language="text")
                     
                     st.divider()
-                    st.markdown("### 📸 Resultado Final (Otimizado pelo Flux)")
+                    st.markdown("### Resultado Final (Otimizado pelo Flux)")
                     
                     # Exibe a imagem gerada pelo Flux
                     st.image(data.get('result_image_url'), caption="Imagem Comercial Premium Gerada", use_container_width=True)
@@ -69,15 +68,15 @@ if uploaded_file is not None:
                     erro_msg = data.get('erro', data.get('message', 'Erro desconhecido.'))
                     
                     if "credit" in erro_msg.lower() or "payment" in erro_msg.lower() or modo_demo:
-                        st.warning("⚠️ Limite de créditos da API atingido no Replicate (Flux), mas o backend respondeu corretamente!")
+                        st.warning("Limite de créditos da API atingido no Replicate (Flux), mas o backend respondeu corretamente!")
                         
                         if modo_demo:
-                            st.info("💡 Exibindo simulação visual do comportamento esperado do Flux (Modo Demo Ativo):")
+                            st.info("Exibindo simulação visual do comportamento esperado do Flux (Modo Demo Ativo):")
                             # Imagem mock de alta qualidade para o avaliador ver o potencial do projeto
                             st.image("https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80", 
                                      caption="[MOCK DEMO] Exemplo de Pizza Premium gerada pelo Flux", use_container_width=True)
                     else:
-                        st.error(f"❌ Requisição Rejeitada pelo Backend: {erro_msg}")
+                        st.error(f" Requisição Rejeitada pelo Backend: {erro_msg}")
                         if data.get('detected'):
                             st.write(f"Objetos detectados na imagem: {data.get('detected')}")
                             
