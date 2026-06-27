@@ -1,4 +1,5 @@
 Food Premium AI Enhancer 🍲
+
 Pipeline Assíncrono Multi-Agente com Guardrails de Visão Computacional e Arquitetura Resiliente
 
 Este projeto apresenta o desenvolvimento de um pipeline inteligente ponta a ponta voltado para a validação, otimização semântica e transformação visual gastronômica. Projetado sob a ótica de engenharia de software robusta, o sistema mitiga o desperdício de recursos computacionais (tokens) em nuvem através de filtros síncronos locais e implementa tolerância a falhas via mecanismos de Graceful Degradation.
