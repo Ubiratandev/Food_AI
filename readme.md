@@ -12,7 +12,7 @@ Abaixo está um exemplo real do pipeline processando uma imagem amadora enviada 
 
 | Foto amadora enviada pelo usuário                                        | Resultado otimizado por IA                                                                |
 | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| ![Foto original amadora](docs/images/input-original.jpg)                 | ![Resultado comercial gerado por IA](docs/images/output-ia.jpg)                           |
+| ![Foto original amadora](./backend/fotoRuim.jpg)                 | ![Resultado comercial gerado por IA](backend/fotoPremium.jpg)                           |
 | Imagem original com iluminação simples, fundo comum e aparência amadora. | Imagem final com iluminação aprimorada, textura mais valorizada e apresentação comercial. |
 
 ---
@@ -23,8 +23,14 @@ Após a validação da imagem, o sistema usa as classes detectadas para gerar um
 
 ```json
 {
-  "flux_prompt": "Transform this amateur sandwich photo into premium iFood-style food photography. Preserve the original sandwich layout, ingredients, toppings, proportions and colors exactly as photographed. Do not add ingredients. Do not redesign the product. Professional food photography, commercial restaurant advertising, ultra realistic, premium presentation. Enhance natural texture of the burger, fresh melted cheese, juicy meat appearance, and soft bun texture. Improve lighting with soft studio lighting while maintaining realism. Dark neutral background, shallow depth of field, DSLR photography, restaurant menu quality. Center composition, product occupying 80-90% of the frame. Remove visual distractions, clutter, blur, noise and harsh flash reflections.",
-  "flux_negative_prompt": "cartoon, CGI, artificial appearance, extra ingredients, duplicated toppings, unrealistic shine, oversaturated colors, low quality, blur"
+  "flux_prompt": "Transform the provided image into a professional commercial food photography shot for a premium Brazilian delivery app like iFood, while strictly preserving the original burger's identity, structure, ingredients, proportions, camera angle, framing, and composition.
+
+Keep the same handmade hamburger from the reference image: soft golden burger bun, visible thick beef patty, melted cheese, red tomato sauce/ketchup dripping from the side, wooden skewer/toothpick inserted vertically through the bun, served on white parchment/wrapping paper. Preserve the same front-facing close-up angle and the same overall placement of every visible ingredient.
+
+Improve only the photographic quality: professional restaurant product photography, appetizing but realistic lighting, sharper focus, cleaner details, improved exposure, natural color correction, enhanced texture of the bun and beef, subtle glossy highlights on the sauce and melted cheese, soft background blur, realistic shadows, high-end delivery menu photo, natural depth of field, DSLR / iPhone Pro commercial food photography style.
+
+The final image must look like the same original burger photographed professionally, not a different burger.",
+  "flux_negative_prompt": "Do not change the burger recipe. Do not add lettuce, tomato slices, onions, bacon, sesame seeds, fries, plate, napkins, logo, text, hands, drinks, extra ingredients, garnish, or sauce that is not present in the reference image. Do not remove the wooden skewer. Do not change the angle, crop, composition, bun shape, patty size, sauce position, or ingredient layout. Do not make it look like a generic stock photo. Do not over-perfect the burger. Do not create a new burger. Avoid cartoon style, illustration, CGI, artificial plastic texture, unrealistic shine, oversaturation, extreme bokeh, distorted food, melted deformed bun, duplicated ingredients, extra patties."
 }
 ```
 
